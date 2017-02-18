@@ -85,7 +85,7 @@ class ThreadUrl(threading.Thread):
     while True:
         (panoid,X,Y) = self.myQueue.get()
         url = _format_tile(panoid, X, Y)
-        input_image = ROOT_FOLDER + str(panoid)+'-'+str(X)+'-'+str(Y)+".png"
+        input_image = ROOT_FOLDER + str(panoid)+'-'+str(X)+'-'+str(Y)+".jpg"
         urllib.request.urlretrieve(url,input_image)
         self.myQueue.task_done()
  
@@ -136,21 +136,33 @@ def get_api_by_panoid(panoid):
     r = requests.get(_format_id(panoid))
     return json.loads(r.text)
 
-def stitch(data):
+def stitch(data, hd):
     '''
         stitch tiles together and save a stitched file
     '''
+    if hd:
+        ext = '.png'
+    else :
+        ext = '.jpg'
     rect = equirect(ZOOM)
-    images = [Image.open(ROOT_FOLDER +str(panoid)+'-'+str(X)+'-'+str(Y)+".png") for (panoid, X, Y) in data ]
+    images = [Image.open(ROOT_FOLDER +str(panoid)+'-'+str(X)+'-'+str(Y)+'.jpg') for (panoid, X, Y) in data ]
     total_size = (rect['width'], rect['height'])
     stitched = Image.new('RGB', total_size)
     panoid = data[0][0]
     for (datum, im) in zip(data, images):
         (panoid, x, y) = datum
         stitched.paste(im=im, box=(512*x,512*y))
+    if hd:
+        blah = 'hd'
+    else:
+        blah = ''
 
-    fname = ROOT_FOLDER + 'stitched-'+panoid+'.png'
-
+    fname = ROOT_FOLDER + blah +'stitched-'+panoid+ext
+    if hd:
+        stitched = stitched.resize((4096,2048))
+    else:
+        stitched = stitched.resize((2048,1024))
+    
     stitched.save(fname)
 
 
@@ -162,7 +174,7 @@ def api(lat,lng):
     panoid = get_panoid_by_loc(lat,lng)
     if not panoid:
       abort(404)
-    output_image = ROOT_FOLDER + 'stitched-'+panoid+'.png'
+    output_image = ROOT_FOLDER + 'stitched-'+panoid+'.jpg'
     if os.path.exists(output_image):
         pass
     else:
@@ -177,7 +189,7 @@ def panoid_get(panoid):
         downloads equirectangular streetview image at panoid
         http://localhost:5000/panoid/DtaclnuEVvssSuojH8CPpw
     '''
-    output_image = ROOT_FOLDER + 'stitched-'+panoid+'.png'
+    output_image = ROOT_FOLDER + 'stitched-'+panoid+'.jpg'
     if os.path.exists(output_image):
         pass
     else:
@@ -185,6 +197,23 @@ def panoid_get(panoid):
         download_all_img(data)
         stitch(data)
     return send_file(output_image)
+
+
+@app.route('/keypanoid/<panoid>')
+def keypanoid_get(panoid):
+    '''
+        downloads equirectangular streetview image at panoid
+        http://localhost:5000/panoid/DtaclnuEVvssSuojH8CPpw
+    '''
+    output_image = ROOT_FOLDER + 'hdstitched-'+panoid+'.png'
+    if os.path.exists(output_image):
+        pass
+    else:
+        data = [(panoid,X,Y) for X in X_RANGE for Y in Y_RANGE]
+        download_all_img(data)
+        stitch(data, True)
+    return send_file(output_image)
+
 
 @app.route('/api/<panoid>')
 def panoid_api_get(panoid):
