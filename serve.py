@@ -1,11 +1,8 @@
 from flask import Flask, send_file, render_template, abort, send_from_directory
-from StringIO import StringIO
-import urllib, cStringIO
 from PIL import Image
 import urllib
 import requests 
-import os, multiprocessing, Queue, threading, json, glob
-
+import os, queue, threading, json, glob
 
 awesome_locs = [
   [-26.938312,-68.74491499999999],
