@@ -169,7 +169,7 @@ def send_static(path):
 
 
 @app.route('/assets/<path:path>')
-def send_static(path):
+def send_assets(path):
     return send_from_directory('assets', path)
 
 @app.route('/')
