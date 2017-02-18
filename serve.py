@@ -50,7 +50,7 @@ levelsH = [ 1, 1, 2, 4, 7, 13 ]
 
 app = Flask(__name__)
 ALLOWED_HOSTS = ['deepstreetview.com']
-ROOT_FOLDER = "./static/"
+ROOT_FOLDER = "./images/"
 
 x_range = range(0,7)
 y_range = range(0,3)
@@ -154,7 +154,7 @@ def api(lat,lng):
         data = [(panoid,X,Y) for X in x_range for Y in y_range]
         download_all_img(data)
         stitch(data)
-    # for filename in os.listdir('./static'):
+    # for filename in os.listdir('./images'):
     #     if not filename.startswith('stitched'):
     #         os.remove(filename)
     return send_file(output_image)
@@ -163,9 +163,9 @@ def init():
     equirect(zoom)
 
 
-@app.route('/static/<path:path>')
+@app.route('/images/<path:path>')
 def send_static(path):
-    return send_from_directory('static', path)
+    return send_from_directory('images', path)
 
 @app.route('/')
 def index():
