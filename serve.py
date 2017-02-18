@@ -1,8 +1,8 @@
 from flask import Flask, send_file, render_template, abort, send_from_directory
 from PIL import Image
-import urllib
+import urllib.request
 import requests 
-import os, queue, threading, json, glob
+import os, threading, json, glob, queue
 
 awesome_locs = [
   [-26.938312,-68.74491499999999],
@@ -81,30 +81,30 @@ def _format_tile(panoid, x, y):
     return 'https://geo0.ggpht.com/cbk?cb_client=maps_sv.tactile&authuser=0&hl=en&panoid=' + str(panoid) + '&output=tile&x=' + str(x) + '&y=' + str(y) + '&zoom=' + str(zoom) + '&nbt&fover=2'
 
 class ThreadUrl(threading.Thread):
-  def __init__(self, queue):
+  def __init__(self, myQueue):
     threading.Thread.__init__(self)
-    self.queue = queue
+    self.myQueue = myQueue
  
   def run(self):
     while True:
-        (panoid,X,Y) = self.queue.get()
+        (panoid,X,Y) = self.myQueue.get()
         url = _format_tile(panoid, X, Y)
         input_image = ROOT_FOLDER + str(panoid)+'-'+str(X)+'-'+str(Y)+".png"
-        urllib.urlretrieve(url,input_image)
-        self.queue.task_done()
+        urllib.request.urlretrieve(url,input_image)
+        self.myQueue.task_done()
  
 
 def download_all_img(data):
-    queue = Queue.Queue()
+    myQueue = queue.Queue()
 
     for i in range(len(data)):
-        t = ThreadUrl(queue)
+        t = ThreadUrl(myQueue)
         t.setDaemon(True)
         t.start()
     for datum in data:
-        queue.put(datum)
+        myQueue.put(datum)
 
-    queue.join()
+    myQueue.join()
 
 
 def _format_id(panoid):
