@@ -1,4 +1,4 @@
-from flask import Flask, send_file, render_template, abort, send_from_directory
+from flask import Flask, send_file, render_template, abort, send_from_directory, jsonify
 from PIL import Image
 import urllib.request
 import requests 
@@ -121,7 +121,7 @@ def get_panoid_by_loc(lat,lng):
 
 def get_links_by_panoid(panoid):
     r = requests.get(_format_id(panoid))
-    print(json.loads(r.text)['Links'])
+    return json.loads(r.text)['Links']
 
 
 def stitch(data):
@@ -151,10 +151,27 @@ def api(lat,lng):
         data = [(panoid,X,Y) for X in x_range for Y in y_range]
         download_all_img(data)
         stitch(data)
-    # for filename in os.listdir('./images'):
-    #     if not filename.startswith('stitched'):
-    #         os.remove(filename)
     return send_file(output_image)
+
+@app.route('/panoid/<panoid>')
+def panoid_get(panoid):
+    output_image = ROOT_FOLDER + 'stitched-'+panoid+'.png'
+    if os.path.exists(output_image):
+        pass
+    else:
+        data = [(panoid,X,Y) for X in x_range for Y in y_range]
+        download_all_img(data)
+        stitch(data)
+    return send_file(output_image)
+
+
+@app.route('/next/<panoid>')
+def get_next_linked_panoid(panoid):
+    '''
+        return the next panoid
+    '''
+    print (panoid)
+    return jsonify(get_links_by_panoid(panoid))
 
 def init():
     equirect(zoom)
