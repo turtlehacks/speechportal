@@ -118,13 +118,13 @@ def _format_loc(lat, lng, rad):
 
 def get_panoid_by_loc(lat,lng):
     r = requests.get(_format_loc(lat,lng,400))
-    print r.text
+    print(r.text)
     if r.text == '{}': return False
     return json.loads(r.text)['result'][0]['id']
 
 def get_links_by_panoid(panoid):
     r = requests.get(_format_id(panoid))
-    print json.loads(r.text)['Links']
+    print(json.loads(r.text)['Links'])
 
 
 def stitch(data):
