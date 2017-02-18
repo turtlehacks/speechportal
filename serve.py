@@ -1,4 +1,4 @@
-from flask import Flask, send_file, render_template, abort
+from flask import Flask, send_file, render_template, abort, send_from_directory
 from StringIO import StringIO
 import urllib, cStringIO
 from PIL import Image

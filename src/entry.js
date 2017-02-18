@@ -1,1 +1,3 @@
-document.write(require("./content.js"));
+import str from "./content.js";
+
+alert(str);
