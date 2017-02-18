@@ -129,6 +129,12 @@ def get_links_by_panoid(panoid):
     r = requests.get(_format_id(panoid))
     return json.loads(r.text)['Links']
 
+def get_api_by_panoid(panoid):
+    '''
+        returns the linked panoid (frames), i.e. clicking the arrow button in google street view
+    '''
+    r = requests.get(_format_id(panoid))
+    return json.loads(r.text)
 
 def stitch(data):
     '''
@@ -180,6 +186,13 @@ def panoid_get(panoid):
         stitch(data)
     return send_file(output_image)
 
+@app.route('/api/<panoid>')
+def panoid_api_get(panoid):
+    '''
+    returns the original panoid api with depth map etc...
+    '''
+    return jsonify(get_api_by_panoid(panoid))
+
 
 @app.route('/next/<panoid>')
 def get_next_linked_panoid(panoid):
@@ -214,4 +227,4 @@ if __name__ == "__main__":
     # data = [(panoid,X,Y) for X in X_RANGE for Y in Y_RANGE]
     # download_all_img(data)
     # stitch(data)
-    get_links_by_panoid(panoid)
+    # get_links_by_panoid(panoid)
