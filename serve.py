@@ -3,8 +3,9 @@ from PIL import Image
 import urllib.request
 import requests 
 import os, threading, json, glob, queue
+app = Flask(__name__)
 
-awesome_locs = [
+AWESOME_LOCS = [
   [-26.938312,-68.74491499999999],
   [60.534114,-149.55007899999998],
   [60.070409,6.542388999999957],
@@ -39,33 +40,31 @@ awesome_locs = [
   [-1.3766622,36.7743556]
 ]
 
-widths = [ 416, 832, 1664, 3328, 6656, 13312 ]
-heights = [ 416, 416, 832, 1664, 3328, 6656 ]
-levelsW = [ 1, 2, 4, 7, 13, 26 ]
-levelsH = [ 1, 1, 2, 4, 7, 13 ]
+WIDTHS = [ 416, 832, 1664, 3328, 6656, 13312 ]
+HEIGHTS = [ 416, 416, 832, 1664, 3328, 6656 ]
+LEVELSW = [ 1, 2, 4, 7, 13, 26 ]
+LEVELSH = [ 1, 1, 2, 4, 7, 13 ]
 
 
-app = Flask(__name__)
-ALLOWED_HOSTS = ['deepstreetview.com']
 ROOT_FOLDER = "./images/"
 
-x_range = range(0,7)
-y_range = range(0,3)
+X_RANGE = range(0,7)
+Y_RANGE = range(0,3)
 
-zoom = 3
+ZOOM = 3
 
 def equirect(zoom):
-    global x_range, y_range
+    global X_RANGE, Y_RANGE
 
-    width = widths[zoom]
-    height = heights[zoom]
-    cols = levelsW[zoom]
-    rows = levelsH[zoom]
+    width = WIDTHS[zoom]
+    height = HEIGHTS[zoom]
+    cols = LEVELSW[zoom]
+    rows = LEVELSH[zoom]
     squareW = 512
     squareH = 512
 
-    x_range = range(0,cols)
-    y_range = range(0,rows)
+    X_RANGE = range(0,cols)
+    Y_RANGE = range(0,rows)
 
     return {
         'columns': cols,
@@ -76,9 +75,6 @@ def equirect(zoom):
         'height': height
     }
 
-
-def _format_tile(panoid, x, y):
-    return 'https://geo0.ggpht.com/cbk?cb_client=maps_sv.tactile&authuser=0&hl=en&panoid=' + str(panoid) + '&output=tile&x=' + str(x) + '&y=' + str(y) + '&zoom=' + str(zoom) + '&nbt&fover=2'
 
 class ThreadUrl(threading.Thread):
   def __init__(self, myQueue):
@@ -113,19 +109,32 @@ def _format_id(panoid):
 def _format_loc(lat, lng, rad):
     return 'https://cbks0.google.com/cbk?cb_client=apiv3&authuser=0&hl=en&output=polygon&it=1%3A1&rank=closest&ll=' + str(lat)+ ',' + str(lng) + '&radius=' + str(rad)
 
+def _format_tile(panoid, x, y):
+    return 'https://geo0.ggpht.com/cbk?cb_client=maps_sv.tactile&authuser=0&hl=en&panoid=' + str(panoid) + '&output=tile&x=' + str(x) + '&y=' + str(y) + '&zoom=' + str(ZOOM) + '&nbt&fover=2'
+
+
 def get_panoid_by_loc(lat,lng):
+    '''
+        return panoid from location, False if not found
+    '''
     r = requests.get(_format_loc(lat,lng,400))
     print(r.text)
     if r.text == '{}': return False
     return json.loads(r.text)['result'][0]['id']
 
 def get_links_by_panoid(panoid):
+    '''
+        returns the linked panoid (frames), i.e. clicking the arrow button in google street view
+    '''
     r = requests.get(_format_id(panoid))
     return json.loads(r.text)['Links']
 
 
 def stitch(data):
-    rect = equirect(zoom)
+    '''
+        stitch tiles together and save a stitched file
+    '''
+    rect = equirect(ZOOM)
     images = [Image.open(ROOT_FOLDER +str(panoid)+'-'+str(X)+'-'+str(Y)+".png") for (panoid, X, Y) in data ]
     total_size = (rect['width'], rect['height'])
     stitched = Image.new('RGB', total_size)
@@ -141,6 +150,9 @@ def stitch(data):
 
 @app.route('/location/<lat>/<lng>')
 def api(lat,lng):
+    '''
+        GET the equirectangular streetview image at location
+    '''
     panoid = get_panoid_by_loc(lat,lng)
     if not panoid:
       abort(404)
@@ -148,18 +160,22 @@ def api(lat,lng):
     if os.path.exists(output_image):
         pass
     else:
-        data = [(panoid,X,Y) for X in x_range for Y in y_range]
+        data = [(panoid,X,Y) for X in X_RANGE for Y in Y_RANGE]
         download_all_img(data)
         stitch(data)
     return send_file(output_image)
 
 @app.route('/panoid/<panoid>')
 def panoid_get(panoid):
+    '''
+        downloads equirectangular streetview image at panoid
+        http://localhost:5000/panoid/DtaclnuEVvssSuojH8CPpw
+    '''
     output_image = ROOT_FOLDER + 'stitched-'+panoid+'.png'
     if os.path.exists(output_image):
         pass
     else:
-        data = [(panoid,X,Y) for X in x_range for Y in y_range]
+        data = [(panoid,X,Y) for X in X_RANGE for Y in Y_RANGE]
         download_all_img(data)
         stitch(data)
     return send_file(output_image)
@@ -168,14 +184,14 @@ def panoid_get(panoid):
 @app.route('/next/<panoid>')
 def get_next_linked_panoid(panoid):
     '''
-        return the next panoid
+        GET the next panoid
+
+        http://localhost:5000/next/DtaclnuEVvssSuojH8CPpw
     '''
-    print (panoid)
     return jsonify(get_links_by_panoid(panoid))
 
 def init():
-    equirect(zoom)
-
+    equirect(ZOOM)
 
 @app.route('/images/<path:path>')
 def send_static(path):
@@ -194,8 +210,8 @@ if __name__ == "__main__":
     init()
     app.run('127.0.0.1','5000')
 
-    # panoid = get_panoid_by_loc(awesome_locs[0][0],awesome_locs[0][1])
-    # data = [(panoid,X,Y) for X in x_range for Y in y_range]
+    # panoid = get_panoid_by_loc(AWESOME_LOCS[0][0],AWESOME_LOCS[0][1])
+    # data = [(panoid,X,Y) for X in X_RANGE for Y in Y_RANGE]
     # download_all_img(data)
     # stitch(data)
     get_links_by_panoid(panoid)
