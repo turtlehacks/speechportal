@@ -20,7 +20,8 @@ function init() {
 
     fetch(document.location.origin+'/nouns/'+window.paragraph_list[window.curr_paragraph])
     .then((resp)=>resp.json())
-    .then(insertImgs);
+    .then(insertImgs)
+    .catch(console.error)
 
 }
 
@@ -71,6 +72,7 @@ function insertImgs(srcs){
 
 function deleteImgs(){
   var imgs = document.querySelector('a-image');
+  if (imgs)
   imgs.forEach((img)=> img.parentNode.removeChild(img));
 }
 
