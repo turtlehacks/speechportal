@@ -38,7 +38,7 @@ document.body.onkeydown = function(e){
       next_frame();
   }
   if(e.keyCode == 90){ // z press
-      initialize();
+      resetAll();
   }
 }
 
@@ -59,6 +59,8 @@ var total_results_past; //num of times at previous check
 var restart_recog; //true so that recording doesn't stop
 var speech_pause_timer; //check if user is speaking
 var text_to_speech;
+var conf_cuttoff = 0.7; // when to move to next line
+var reading;
 
 initialize();
 
@@ -72,10 +74,13 @@ function initialize(){
   total_results = 0;
   total_results_past = 0;
   restart_recog = true;
+  reading = false;
 
   recognition.start();
-  startTimer();
-  window.addEventListener('startTimer', startTimer)
+  setTimeout(()=>{
+    startTimer();
+  },5000);
+  window.addEventListener('startTimer', startTimer);
 
 }
 
@@ -83,11 +88,16 @@ recognition.onresult = function(event) {
   total_results++;
   //list of recognized phrases, split by pauses. If the phrase is final, add to perm string
   for(var i = event.resultIndex; i < event.results.length; ++i) {
-    var input_split = event.results[i][0].transcript.toLowerCase().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ").split(" ")
+    var input_raw = event.results[i][0].transcript.toLowerCase().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ")
+    var input_split = input_raw.split(" ")
     for(let j=0; j<input_split.length; j++){
       if(! unimportant_words.has(input_split[j])){
         input_set.add(input_split[j])
       }
+    }
+    if(input_raw.includes("portal help")){
+      read_speech("Ok! You're supposed to say: " + window.paragraph_list[window.curr_paragraph]);
+      break;
     }
   }
 
@@ -98,7 +108,7 @@ recognition.onresult = function(event) {
     conf_score = calc_conf_score(input_set, window.paragraph_list[window.curr_paragraph]);
     // let conf = calc_conf_score(perm_trans, window.paragraph_list[curr_paragraph]);
     console.log(conf_score);
-    if(conf_score >= 0.6) {
+    if(conf_score >= conf_cuttoff) {
       next_frame();
     }
   }
@@ -131,7 +141,12 @@ function calc_conf_score(input_set, master_paragraph){
 // Resets the input for the next line
 function next_frame(){
   clearInterval(speech_pause_timer);
-  if(window.curr_paragraph<window.paragraph_list.length-1) window.curr_paragraph++;
+  if(window.curr_paragraph<window.paragraph_list.length-1){
+    window.curr_paragraph++;
+  } else{
+    resetAll();
+    return;
+  }
   var event = new CustomEvent('startTransition', {"text":window.paragraph_list[window.curr_paragraph]});
   window.dispatchEvent(event);
 
@@ -143,6 +158,7 @@ function next_frame(){
   total_results_past = 0;
   conf_score = 0;
   conf_score_past = 0;
+  reading = false;
 }
 
 var flip = false; //check if better score when true, so every other time
@@ -163,6 +179,8 @@ function check_if_update(){
 }
 
 function read_speech(text){
+  if(reading) return;
+  reading = true;
   clearInterval(speech_pause_timer);
   restart_recog = false;
   recognition.stop();
@@ -173,9 +191,16 @@ function read_speech(text){
     startTimer();
   }
   window.speechSynthesis.speak(text_to_speech);
+  reading = false;
 }
 
 function startTimer(){
   clearInterval(speech_pause_timer);
   speech_pause_timer = setInterval(check_if_update, 4000);
+}
+
+function resetAll(){
+  // initialize();
+  // init();
+  window.location.href="/"
 }
