@@ -5,7 +5,6 @@ var COUNTER = 0;
 const places = [
 'ABqudn7qGGDzdu-3HZFuZw',
 'E9JGW1q48jvgvFkjx0kYjw',
-'SJy57DZ_DJBvXa4bN3assw',
 'ocuWPJcOa4FUFc_pxh0fNQ',
 '_znQ1nR9o95RXrK1kEwP0Q',
 'BXw6CgL5yxDtsFlLJ_AdUw',
@@ -72,9 +71,9 @@ function startTransition(to){
         unsetBGTransparent();
         var event = new Event('startTimer');
         window.dispatchEvent(event);
-      },3000);
+      },1500);
     }, 1000);
-  }, 10000);
+  }, 5000);
 }
 
 
