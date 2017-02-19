@@ -19,10 +19,10 @@ var isMobile = { // check if user device is mobile
     }
 };
 
-var paragraph_list = ["I have a dream that one day this nation will rise",
-                      "up and live out the true meaning of its creed",
+var paragraph_list = ["I have a dream that one day this nation will rise up",
+                      "and live out the true meaning of its creed",
                       "We hold these truths to be self-evident",
-                      "that all men are created equal.",]
+                      "that all men are created equal."]
 
 var unimportant_words = new Set('i','is','was','am','are','a','and','the');
 
@@ -175,6 +175,6 @@ function read_speech(text){
 }
 
 function startTimer(){
+  clearInterval(speech_pause_timer);
   speech_pause_timer = setInterval(check_if_update, 4000);
 }
-
