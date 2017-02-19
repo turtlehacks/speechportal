@@ -49,7 +49,11 @@ function startTransition(to){
     setBGTransparent();
     setTimeout(()=>{
       setHDSky("DtaclnuEVvssSuojH8CPpw");
-      setTimeout(()=>unsetBGTransparent(),3000);
+      setTimeout(()=>{
+        unsetBGTransparent();
+        var event = new Event('startTimer');
+        window.dispatchEvent(event);
+      },3000);
     }, 1000);
   }, 10000);
 }

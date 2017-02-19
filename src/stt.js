@@ -38,7 +38,8 @@ function initialize(){
   restart_recog = true;
 
   recognition.start();
-  speech_pause_timer = setInterval(check_if_update, 7000);
+  startTimer();
+  window.addEventListener('startTimer', startTimer)
 }
 
 recognition.onresult = function(event) {
@@ -92,7 +93,7 @@ function calc_conf_score(input_set, master_paragraph){
 
 // Resets the input for the next line
 function next_frame(){
-
+  clearInterval(speech_pause_timer);
   var event = new Event('startTransition');
   window.dispatchEvent(event);
 
@@ -132,7 +133,11 @@ function read_speech(text){
   text_to_speech.onend = function(event){
     restart_recog = true;
     recognition.start();
-    speech_pause_timer = setInterval(check_if_update, 7000);
+    startTimer();
   }
   window.speechSynthesis.speak(text_to_speech);
+}
+
+function startTimer(){
+  speech_pause_timer = setInterval(check_if_update, 7000);
 }
