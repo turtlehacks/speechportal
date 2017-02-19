@@ -43,7 +43,7 @@ document.body.onkeydown = function(e){
 }
 
 if( isMobile.any() ){ // user device is mobile
-  document.body.ontouchstart = function(e){ // screen touch
+  document.querySelector("canvas").ontouchstart = function(e){ // screen touch
     next_frame();
   }
 }
@@ -95,10 +95,10 @@ recognition.onresult = function(event) {
         input_set.add(input_split[j])
       }
     }
-    if(input_raw.includes("portal help")){
-      read_speech("Ok! You're supposed to say: " + window.paragraph_list[window.curr_paragraph]);
-      break;
-    }
+//    if(input_raw.includes("portal help")){
+//      read_speech("Ok! Help you say: " + window.paragraph_list[window.curr_paragraph]);
+//      break;
+//    }
   }
 
   let input_set_size = input_set.size
@@ -202,5 +202,5 @@ function startTimer(){
 function resetAll(){
   // initialize();
   // init();
-  window.location.href="/"
+  window.location.href="/viewer";
 }
