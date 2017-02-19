@@ -21,12 +21,9 @@ var isMobile = { // check if user device is mobile
 
 window.paragraph_list = [
   "Some say the world will end in fire, Some say in ice.",
-  "From what I’ve tasted of desire",
-  "I hold with those who favor fire.",
-  "But if it had to perish twice,",
-  "I think I know enough of hate",
-  "To say that for destruction ice",
-  "Is also great and would suffice."]
+  "From what I’ve tasted of desire, I hold with those who favor fire.",
+  "But if it had to perish twice, I think I know enough of hate",
+  "To say that for destruction ice, Is also great and would suffice."]
 
 var unimportant_words = new Set('i','is','was','am','are','a','and','the');
 
@@ -134,7 +131,7 @@ function calc_conf_score(input_set, master_paragraph){
 // Resets the input for the next line
 function next_frame(){
   clearInterval(speech_pause_timer);
-  if(window.curr_paragraph<window.paragraph_list.length) window.curr_paragraph++;
+  if(window.curr_paragraph<window.paragraph_list.length-1) window.curr_paragraph++;
   var event = new CustomEvent('startTransition', {"text":window.paragraph_list[window.curr_paragraph]});
   window.dispatchEvent(event);
 
