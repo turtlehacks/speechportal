@@ -1,5 +1,21 @@
 window.current_panoid = '';
 
+var COUNTER = 0;
+
+const places = [
+'ABqudn7qGGDzdu-3HZFuZw',
+'E9JGW1q48jvgvFkjx0kYjw',
+'SJy57DZ_DJBvXa4bN3assw',
+'ocuWPJcOa4FUFc_pxh0fNQ',
+'_znQ1nR9o95RXrK1kEwP0Q',
+'BXw6CgL5yxDtsFlLJ_AdUw',
+'EVUfulQv-D5ypQwXKoF-hA',
+'_fFPxZTrOI7MHyReJhWung',
+'nBLnNFZ-voV1RiWgryQd6w',
+]
+
+
+
 function init() {
     const init_panoid = "Jf1XdypK_M7bjLeY1N581g";
     setHDSky(init_panoid);
@@ -46,9 +62,12 @@ function startTransition(to){
   setTimeout(()=>{
     clearInterval(transition);
 //    setHDSky(window.current_panoid);
+
     setBGTransparent();
+
     setTimeout(()=>{
-      setHDSky("DtaclnuEVvssSuojH8CPpw");
+      setHDSky(places[COUNTER]);
+      COUNTER++;
       setTimeout(()=>unsetBGTransparent(),3000);
     }, 1000);
   }, 10000);
