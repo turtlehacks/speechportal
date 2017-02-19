@@ -1,5 +1,5 @@
 
-var paragraph_list = ["This is why I am the chicken. I am truly, truly a fire dog. Honestly.",
+var paragraph_list = ["Hello world!",
     "DONALD TRUMP IS MY FUCKING IDOL.",
     "Dream on apples, my favorite chipmunk isn't Alvin, it's Gerald."]
 var unimportant_words = new Set('i','is','was','am','are','a','and','the');
@@ -57,7 +57,7 @@ recognition.onresult = function(event) {
     conf_score = calc_conf_score(input_set, paragraph_list[curr_paragraph]);
     // let conf = calc_conf_score(perm_trans, paragraph_list[curr_paragraph]);
     console.log(conf_score);
-    if(conf_score >= 0.8) {
+    if(conf_score >= 0.6) {
       next_frame();
     }
   }
