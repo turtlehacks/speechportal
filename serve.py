@@ -246,11 +246,11 @@ def init():
 
 @app.route('/nouns/<text>')
 def nlp(text):
-    blob = TextBlob(text).noun_phrases
+    blob = [word for (word, tag) in TextBlob(text).tags if tag == "NN"]
     print(blob)
     searchq = [ unsplash.photos().search_photos(query=x) for x in blob ]
 #    print(searchq)
-    ret = [ x['results'][0]['urls']['small'] for x in searchq if x['results'] ]
+    ret = [ x['results'][0]['urls']['raw'] for x in searchq if x['results'] ]
     return jsonify(ret)
 
 @app.route('/images/<path:path>')

@@ -17,6 +17,11 @@ const places = [
 function init() {
     const init_panoid = "Jf1XdypK_M7bjLeY1N581g";
     setHDSky(init_panoid);
+
+    fetch(document.location.origin+'/nouns/'+window.paragraph_list[window.curr_paragraph])
+    .then((resp)=>resp.json())
+    .then(insertImgs);
+
 }
 
 function setSky(panoid){
@@ -54,25 +59,25 @@ function updateSky(){
 }
 
 function insertImgs(srcs){
+  console.log(srcs)
   var scene = document.querySelector('a-scene');
   srcs.forEach((src,i)=>{
-    var img = document.createElement('a-img');
+    var img = document.createElement('a-image');
     img.setAttribute('src', src);
-    img.setAttribute('position', '1 2 '+3+i);
+    img.setAttribute('position', '1 2 '+(3+i));
     scene.appendChild(img);
   });
 }
 
-function deleteImg(){
-  var img = document.querySelector('a-image');
-  img.parentNode.removeChild(img);
+function deleteImgs(){
+  var imgs = document.querySelector('a-image');
+  imgs.forEach((img)=> img.parentNode.removeChild(img));
 }
 
-function startTransition(e){
+function startTransition(){
 
   var transition = setInterval(()=>updateSky(), 100);
-  deleteImg();
-alert(e);
+  deleteImgs();
 
   setTimeout(()=>{
     clearInterval(transition);
@@ -85,8 +90,8 @@ alert(e);
       COUNTER++;
       setTimeout(()=>{
         unsetBGTransparent();
-        // alert(e.text);
-        fetch(document.location.origin+'/nouns/'+e.text)
+
+        fetch(document.location.origin+'/nouns/'+window.paragraph_list[window.curr_paragraph])
         .then((resp)=>resp.json())
         .then(insertImgs);
         
