@@ -42,11 +42,11 @@ document.body.onkeydown = function(e){
   }
 }
 
-// if( isMobile.any() ){ // user device is mobile
-//   document.body.ontouchstart = function(e){ // screen touch
-//     next_frame();
-//   }
-// }
+if( isMobile.any() ){ // user device is mobile
+  document.body.ontouchstart = function(e){ // screen touch
+    next_frame();
+  }
+}
 
 //global vars
 window.curr_paragraph; //index
