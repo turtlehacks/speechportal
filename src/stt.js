@@ -130,12 +130,12 @@ function calc_conf_score(input_set, master_paragraph){
 // Resets the input for the next line
 function next_frame(){
   clearInterval(speech_pause_timer);
-  var event = new Event('startTransition');
+  curr_paragraph++;
+  var event = new CustomEvent('startTransition', {"text":paragraph_list[curr_paragraph]});
   window.dispatchEvent(event);
 
   console.log("Achieved confidence interval");
 
-  curr_paragraph++;
   input_set = new Set();
   input_set_size_past = 0;
   total_results = 0;
