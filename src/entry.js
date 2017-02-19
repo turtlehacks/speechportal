@@ -107,9 +107,9 @@ function startTransition(){
 
         var event = new Event('startTimer');
         window.dispatchEvent(event);
-      },1500);
+      },1000);
     }, 1000);
-  }, 5000);
+  }, 1000);
 }
 
 
