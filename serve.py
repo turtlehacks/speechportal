@@ -244,9 +244,13 @@ def send_static(path):
 def send_assets(path):
     return send_from_directory('assets', path)
 
+@app.route('/viewer')
+def viewer():
+    return render_template('viewer.jinja2')
+
 @app.route('/')
 def index():
-    return render_template('viewer.jinja2')
+    return render_template('index.jinja2')
 
 if __name__ == "__main__":
     init()
