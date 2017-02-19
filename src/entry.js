@@ -2,12 +2,17 @@ window.current_panoid = '';
 
 function init() {
     const init_panoid = "Jf1XdypK_M7bjLeY1N581g";
-    setSky(init_panoid);
+    setHDSky(init_panoid);
 }
 
 function setSky(panoid){
     const sky = document.querySelector('a-sky');
     sky.setAttribute('src', document.location.origin + "/panoid/" + panoid);
+    window.current_panoid = panoid;
+}
+function setHDSky(panoid){
+    const sky = document.querySelector('a-sky');
+    sky.setAttribute('src', document.location.origin + "/keypanoid/" + panoid);
     window.current_panoid = panoid;
 }
 
@@ -23,7 +28,23 @@ function updateSky(){
     })
 }
 
+function startTransition(){
+
+  var transition = setInterval(()=>updateSky(), 100);
+
+  setTimeout(()=>{
+    clearInterval(transition);
+    setHDSky(window.current_panoid);
+  }, 10000);
+}
+
+
 window.onload = function() {
+require('./stt.js');
     init();
-    setInterval(updateSky, 1000);
+    window.addEventListener('startTransition', startTransition);
+
+//    setHDSky("DtaclnuEVvssSuojH8CPpw");
+    
+    
 };

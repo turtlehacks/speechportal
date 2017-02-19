@@ -89,7 +89,12 @@ function calc_conf_score(input_set, master_paragraph){
 
 // Resets the input for the next line
 function next_frame(){
+
+  var event = new Event('startTransition');
+  window.dispatchEvent(event);
+
   console.log("ACHIEVED 80% CONFIDENCE: GOING TO A NEW LINE");
+
   curr_paragraph++;
   input_set = new Set();
   input_set_size_past = 0;

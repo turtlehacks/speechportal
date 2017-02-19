@@ -161,7 +161,7 @@ def stitch(data, hd):
     if hd:
         stitched = stitched.resize((4096,2048))
     else:
-        stitched = stitched.resize((2048,1024))
+        stitched = stitched.resize((1024,512))
     
     stitched.save(fname)
 
@@ -180,7 +180,7 @@ def api(lat,lng):
     else:
         data = [(panoid,X,Y) for X in X_RANGE for Y in Y_RANGE]
         download_all_img(data)
-        stitch(data)
+        stitch(data, False)
     return send_file(output_image)
 
 @app.route('/panoid/<panoid>')
@@ -195,7 +195,7 @@ def panoid_get(panoid):
     else:
         data = [(panoid,X,Y) for X in X_RANGE for Y in Y_RANGE]
         download_all_img(data)
-        stitch(data)
+        stitch(data, False)
     return send_file(output_image)
 
 
