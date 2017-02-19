@@ -53,9 +53,26 @@ function updateSky(){
     })
 }
 
-function startTransition(to){
+function insertImgs(srcs){
+  var scene = document.querySelector('a-scene');
+  srcs.forEach((src,i)=>{
+    var img = document.createElement('a-img');
+    img.setAttribute('src', src);
+    img.setAttribute('position', '1 2 '+3+i);
+    scene.appendChild(img);
+  });
+}
+
+function deleteImg(){
+  var img = document.querySelector('a-image');
+  img.parentNode.removeChild(img);
+}
+
+function startTransition(e){
 
   var transition = setInterval(()=>updateSky(), 100);
+  deleteImg();
+alert(e);
 
   setTimeout(()=>{
     clearInterval(transition);
@@ -68,6 +85,11 @@ function startTransition(to){
       COUNTER++;
       setTimeout(()=>{
         unsetBGTransparent();
+        // alert(e.text);
+        fetch(document.location.origin+'/nouns/'+e.text)
+        .then((resp)=>resp.json())
+        .then(insertImgs);
+        
         var event = new Event('startTimer');
         window.dispatchEvent(event);
       },1500);
