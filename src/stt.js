@@ -1,3 +1,23 @@
+var isMobile = { // check if user device is mobile
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
 
 var paragraph_list = ["I have a dream that one day this nation will rise",
                       "up and live out the true meaning of its creed",
@@ -12,16 +32,15 @@ var recognition = new webkitSpeechRecognition(); //Chrome supports webkit prefix
 recognition.continuous = true; // doesn't turn off recognition during pause
 recognition.interimResults = true; // can see the interim results
 
-document.body.onkeyup = function(e){
+document.body.onkeydown = function(e){
   if(e.keyCode == 32){ // spacebar press
       next_frame();
   }
-}
-document.body.onkeyup = function(e){
   if(e.keyCode == 90){ // z press
       initialize();
   }
 }
+
 if( isMobile.any() ){ // user device is mobile
   document.body.ontouchstart = function(e){ // screen touch
     next_frame();
@@ -159,23 +178,3 @@ function startTimer(){
   speech_pause_timer = setInterval(check_if_update, 4000);
 }
 
-var isMobile = { // check if user device is mobile
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-    }
-};

@@ -10,7 +10,6 @@ const places = [
 'BXw6CgL5yxDtsFlLJ_AdUw',
 'EVUfulQv-D5ypQwXKoF-hA',
 '_fFPxZTrOI7MHyReJhWung',
-'nBLnNFZ-voV1RiWgryQd6w',
 ]
 
 
