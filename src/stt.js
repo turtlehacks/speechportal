@@ -19,7 +19,7 @@ var isMobile = { // check if user device is mobile
     }
 };
 
-var paragraph_list = ["I have a dream that one day this nation will rise up",
+window.paragraph_list = ["I have a dream that one day this nation will rise up",
                       "and live out the true meaning of its creed",
                       "We hold these truths to be self-evident",
                       "that all men are created equal."]
@@ -48,7 +48,7 @@ if( isMobile.any() ){ // user device is mobile
 }
 
 //global vars
-var curr_paragraph; //index
+window.curr_paragraph; //index
 var input_set; //all words said by user
 var input_set_size_past; //size of set at previous check
 var conf_score; //accuracy of input compared to master paragraph
@@ -63,7 +63,7 @@ initialize();
 
 // instantiate
 function initialize(){
-  curr_paragraph = 0;
+  window.curr_paragraph = 0;
   input_set = new Set();
   input_set_size_past = 0;
   conf_score = 0;
@@ -94,8 +94,8 @@ recognition.onresult = function(event) {
   console.log("size:",input_set_size)
   if( input_set_size>input_set_size_past){
     input_set_size_past = input_set_size;
-    conf_score = calc_conf_score(input_set, paragraph_list[curr_paragraph]);
-    // let conf = calc_conf_score(perm_trans, paragraph_list[curr_paragraph]);
+    conf_score = calc_conf_score(input_set, window.paragraph_list[window.curr_paragraph]);
+    // let conf = calc_conf_score(perm_trans, window.paragraph_list[curr_paragraph]);
     console.log(conf_score);
     if(conf_score >= 0.6) {
       next_frame();
@@ -130,8 +130,8 @@ function calc_conf_score(input_set, master_paragraph){
 // Resets the input for the next line
 function next_frame(){
   clearInterval(speech_pause_timer);
-  curr_paragraph++;
-  var event = new CustomEvent('startTransition', {"text":paragraph_list[curr_paragraph]});
+  window.curr_paragraph++;
+  var event = new CustomEvent('startTransition', {"text":window.paragraph_list[window.curr_paragraph]});
   window.dispatchEvent(event);
 
   console.log("Achieved confidence interval");
@@ -148,11 +148,11 @@ var flip = false; //check if better score when true, so every other time
 
 function check_if_update(){
   if(total_results_past == total_results){
-    read_speech("Here's a hint. You're supposed to say: " + paragraph_list[curr_paragraph])
+    read_speech("Here's a hint. You're supposed to say: " + window.paragraph_list[window.curr_paragraph])
   } else{
     if(flip){
       if(conf_score == conf_score_past){
-        read_speech("You seem lost. You're supposed to say: " + paragraph_list[curr_paragraph])
+        read_speech("You seem lost. You're supposed to say: " + window.paragraph_list[window.curr_paragraph])
       }
       conf_score_past = conf_score
     }
