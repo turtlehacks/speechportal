@@ -2,6 +2,7 @@
 var paragraph_list = ["Hello world!",
     "DONALD TRUMP IS MY FUCKING IDOL.",
     "Dream on apples, my favorite chipmunk isn't Alvin, it's Gerald."]
+
 var unimportant_words = new Set('i','is','was','am','are','a','and','the');
 
 
@@ -29,8 +30,8 @@ function initialize(){
   curr_paragraph = 0;
   input_set = new Set();
   input_set_size_past = 0;
-  conf_score =0;
-  conf_score_past =0;
+  conf_score = 0;
+  conf_score_past = 0;
   total_results = 0;
   total_results_past = 0;
   restart_recog = true;
@@ -50,6 +51,7 @@ recognition.onresult = function(event) {
       }
     }
   }
+
   let input_set_size = input_set.size
   console.log("size:",input_set_size)
   if( input_set_size>input_set_size_past){
@@ -61,7 +63,6 @@ recognition.onresult = function(event) {
       next_frame();
     }
   }
-
 }
 
 recognition.onend = function(event){
@@ -94,7 +95,7 @@ function next_frame(){
   var event = new Event('startTransition');
   window.dispatchEvent(event);
 
-  console.log("ACHIEVED 80% CONFIDENCE: GOING TO A NEW LINE");
+  console.log("Achieved confidence interval");
 
   curr_paragraph++;
   input_set = new Set();
@@ -106,15 +107,14 @@ function next_frame(){
 }
 
 var flip = false; //check if better score when true, so every other time
+
 function check_if_update(){
   if(total_results_past == total_results){
-    console.log("you've said nothing")
-    read_speech("Here's a hint. You're supposed to say: "+paragraph_list[curr_paragraph])
+    read_speech("Here's a hint. You're supposed to say: " + paragraph_list[curr_paragraph])
   } else{
     if(flip){
       if(conf_score == conf_score_past){
-        console.log("you're not following the speech")
-        read_speech("You seem lost. You're supposed to say: "+paragraph_list[curr_paragraph])
+        read_speech("You seem lost. You're supposed to say: " + paragraph_list[curr_paragraph])
       }
       conf_score_past = conf_score
     }
