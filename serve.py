@@ -3,6 +3,15 @@ from PIL import Image
 import urllib.request
 import requests 
 import os, threading, json, glob, queue
+from textblob import TextBlob
+from unsplash_python.unsplash import Unsplash
+
+unsplash = Unsplash({
+    'application_id': '30a7d2c59ecd38ab3631dad0bc18005c87d65d6af473c93e6df4ce6f2dbd9d07',
+    'secret': '427ee640ed1607b02cab74987bd261383dad9fbe84e9ebc4546ef173352b613b',
+    'callback_url': 'http://www.something.com'
+})
+
 app = Flask(__name__)
 
 AWESOME_LOCS = [
@@ -234,6 +243,15 @@ def get_next_linked_panoid(panoid):
 
 def init():
     equirect(ZOOM)
+
+@app.route('/nouns/<text>')
+def nlp(text):
+    blob = TextBlob(text).noun_phrases
+    print(blob)
+    searchq = [ unsplash.photos().search_photos(query=x) for x in blob ]
+#    print(searchq)
+    ret = [ x['results'][0]['urls']['small'] for x in searchq if x['results'] ]
+    return jsonify(ret)
 
 @app.route('/images/<path:path>')
 def send_static(path):
