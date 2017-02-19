@@ -1,7 +1,8 @@
 
-var paragraph_list = ["Hello world!",
-    "DONALD TRUMP IS MY FUCKING IDOL.",
-    "Dream on apples, my favorite chipmunk isn't Alvin, it's Gerald."]
+var paragraph_list = ["I have a dream that one day this nation will rise",
+                      "up and live out the true meaning of its creed",
+                      "We hold these truths to be self-evident",
+                      "that all men are created equal.",]
 
 var unimportant_words = new Set('i','is','was','am','are','a','and','the');
 
@@ -11,7 +12,7 @@ var recognition = new webkitSpeechRecognition(); //Chrome supports webkit prefix
 recognition.continuous = true; // doesn't turn off recognition during pause
 recognition.interimResults = true; // can see the interim results
 
-//gobal vars
+//global vars
 var curr_paragraph; //index
 var input_set; //all words said by user
 var input_set_size_past; //size of set at previous check
