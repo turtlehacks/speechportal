@@ -6,7 +6,7 @@ var unimportant_words = new Set('i','is','was','am','are','a','and','the');
 
 
 // instantiate recognition
-var recognition = new webkitSpeechRecognition();
+var recognition = SpeechRecognition || webkitSpeechRecognition; //Chrome supports webkit prefixed, firefox doesn't
 recognition.continuous = true; // doesn't turn off recognition during pause
 recognition.interimResults = true; // can see the interim results
 
@@ -77,10 +77,11 @@ function calc_conf_score(input_set, master_paragraph){
   let num_same_words = 0;
   // clean string and split by spaces
   let master_paragraph_split = master_paragraph.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ").split(" ");
-  let num_words_paragraph = master_paragraph_split.length;
+  let master_paragraph_split_filtered = master_paragraph_split.filter((x)=>!unimportant_words.has(x));
+  let num_words_paragraph = master_paragraph_split_filtered.length;
 
-  for(var i = 0; i < master_paragraph_split.length; i++){
-    if (input_set.has(master_paragraph_split[i])){
+  for(var i = 0; i < master_paragraph_split_filtered.length; i++){
+    if (input_set.has(master_paragraph_split_filtered[i])){
       num_same_words++;
     }
   }
