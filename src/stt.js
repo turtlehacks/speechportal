@@ -6,7 +6,7 @@ var unimportant_words = new Set('i','is','was','am','are','a','and','the');
 
 
 // instantiate recognition
-var recognition = SpeechRecognition || webkitSpeechRecognition; //Chrome supports webkit prefixed, firefox doesn't
+var recognition = new webkitSpeechRecognition(); //Chrome supports webkit prefixed, firefox doesn't
 recognition.continuous = true; // doesn't turn off recognition during pause
 recognition.interimResults = true; // can see the interim results
 

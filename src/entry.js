@@ -15,6 +15,17 @@ function setHDSky(panoid){
     sky.setAttribute('src', document.location.origin + "/keypanoid/" + panoid);
     window.current_panoid = panoid;
 }
+function setBGTransparent(){
+    const sky = document.querySelector('a-sky');
+    sky.setAttribute('opacity', '0');
+    sky.setAttribute('color', '#fff');
+}
+
+function unsetBGTransparent(){
+    const sky = document.querySelector('a-sky');
+    sky.setAttribute('opacity', '1');
+    sky.setAttribute('color', '#fff');
+}
 
 function updateSky(){
     fetch(document.location.origin + "/next/" + window.current_panoid)
@@ -28,23 +39,24 @@ function updateSky(){
     })
 }
 
-function startTransition(){
+function startTransition(to){
 
   var transition = setInterval(()=>updateSky(), 100);
 
   setTimeout(()=>{
     clearInterval(transition);
-    setHDSky(window.current_panoid);
+//    setHDSky(window.current_panoid);
+    setBGTransparent();
+    setTimeout(()=>{
+      setHDSky("DtaclnuEVvssSuojH8CPpw");
+      setTimeout(()=>unsetBGTransparent(),3000);
+    }, 1000);
   }, 10000);
 }
 
 
 window.onload = function() {
-require('./stt.js');
+    require('./stt.js');
     init();
     window.addEventListener('startTransition', startTransition);
-
-//    setHDSky("DtaclnuEVvssSuojH8CPpw");
-    
-    
 };
