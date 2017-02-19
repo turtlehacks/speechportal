@@ -68,7 +68,11 @@ function startTransition(to){
     setTimeout(()=>{
       setHDSky(places[COUNTER]);
       COUNTER++;
-      setTimeout(()=>unsetBGTransparent(),3000);
+      setTimeout(()=>{
+        unsetBGTransparent();
+        var event = new Event('startTimer');
+        window.dispatchEvent(event);
+      },3000);
     }, 1000);
   }, 10000);
 }
