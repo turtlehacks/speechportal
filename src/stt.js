@@ -12,6 +12,22 @@ var recognition = new webkitSpeechRecognition(); //Chrome supports webkit prefix
 recognition.continuous = true; // doesn't turn off recognition during pause
 recognition.interimResults = true; // can see the interim results
 
+document.body.onkeyup = function(e){
+  if(e.keyCode == 32){ // spacebar press
+      next_frame();
+  }
+}
+document.body.onkeyup = function(e){
+  if(e.keyCode == 90){ // z press
+      initialize();
+  }
+}
+if( isMobile.any() ){ // user device is mobile
+  document.body.ontouchstart = function(e){ // screen touch
+    next_frame();
+  }
+}
+
 //global vars
 var curr_paragraph; //index
 var input_set; //all words said by user
@@ -41,21 +57,6 @@ function initialize(){
   startTimer();
   window.addEventListener('startTimer', startTimer)
 
-  document.body.onkeyup = function(e){
-    if(e.keyCode == 32){ // spacebar press
-        next_frame();
-    }
-  }
-  document.body.onkeyup = function(e){
-    if(e.keyCode == 90){ // z press
-        initialize();
-    }
-  }
-  if( isMobile.any() ){ // user device is mobile
-    document.body.ontouchstart = function(e){ // screen touch
-      initialize();
-    }
-  }
 }
 
 recognition.onresult = function(event) {
