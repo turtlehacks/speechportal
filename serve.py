@@ -247,10 +247,12 @@ def init():
 @app.route('/nouns/<text>')
 def nlp(text):
     blob = [word for (word, tag) in TextBlob(text).tags if tag == "NN"]
-    print(blob)
+    print(blob) # convert this list of strings(nouns) to a list of urls
+
     searchq = [ unsplash.photos().search_photos(query=x) for x in blob ]
-#    print(searchq)
+    print(searchq)
     ret = [ x['results'][0]['urls']['raw'] for x in searchq if x['results'] ]
+
     return jsonify(ret)
 
 @app.route('/images/<path:path>')
