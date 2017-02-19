@@ -12,6 +12,9 @@ const places = [
 '_fFPxZTrOI7MHyReJhWung',
 ]
 
+const xPosValues = [0, -2.5, 2.5, -4, 4]; //picture x positions
+const zPosValues = [1,2,2,2,2];
+const yRotValues = [0, 50, -50, 40, -40];
 
 
 function init() {
@@ -65,15 +68,20 @@ function insertImgs(srcs){
   srcs.forEach((src,i)=>{
     var img = document.createElement('a-image');
     img.setAttribute('src', src);
-    img.setAttribute('position', (i-1)*2 + ' ' + 2 + ' ' + (5+i) );
+    img.setAttribute('position', xPosValues[i] + ' ' + 2 + ' ' + zPosValues[i] );
+    img.setAttribute('rotation', 0 + ' ' + yRotValues[i] + ' ' + 0 );
     scene.appendChild(img);
   });
 }
 
 function deleteImgs(){
-  var imgs = document.querySelector('a-image');
-  if (imgs)
-  imgs.forEach((img)=> img.parentNode.removeChild(img));
+  var imgs = document.querySelectorAll('a-image');
+  if(imgs){
+    for(let i=0; i<imgs.length; i++){
+      imgs[i].parentNode.removeChild(imgs[i]);
+    }
+  }
+
 }
 
 function startTransition(){
