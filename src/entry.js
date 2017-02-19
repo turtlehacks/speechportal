@@ -65,7 +65,7 @@ function insertImgs(srcs){
   srcs.forEach((src,i)=>{
     var img = document.createElement('a-image');
     img.setAttribute('src', src);
-    img.setAttribute('position', '1 2 '+(3+i));
+    img.setAttribute('position', (i-1)*2 + ' ' + 2 + ' ' + (5+i) );
     scene.appendChild(img);
   });
 }
@@ -96,7 +96,7 @@ function startTransition(){
         fetch(document.location.origin+'/nouns/'+window.paragraph_list[window.curr_paragraph])
         .then((resp)=>resp.json())
         .then(insertImgs);
-        
+
         var event = new Event('startTimer');
         window.dispatchEvent(event);
       },1500);
