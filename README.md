@@ -1,6 +1,8 @@
 # SpeechPortal 
 ----------------
 
+![Devpost Cover](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/475/818/datas/gallery.jpg)
+
 ## Installation
 
 ```
