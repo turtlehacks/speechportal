@@ -19,11 +19,19 @@ var isMobile = { // check if user device is mobile
     }
 };
 
-window.paragraph_list = [
-  "Some say the world will end in fire, Some say in ice.",
-  "From what I’ve tasted of desire, I hold with those who favor fire.",
-  "But if it had to perish twice, I think I know enough of hate",
-  "To say that for destruction ice, Is also great and would suffice."]
+window.paragraph_list = ["The winter evening settles down With smell of steaks in passageways.",
+"Six o'clock. The burnt-out ends of smoky days.",
+"And now a gusty shower wraps The grimy scraps",
+"Of withered leaves about your feet And newspapers from vacant lots;",
+"The showers beat On broken blinds and chimney-pots,",
+"And at the corner of the street A lonely cab-horse steams and stamps.",
+"And then the lighting of the lamps."]
+
+// [
+//   "Some say the world will end in fire, Some say in ice.",
+//   "From what I’ve tasted of desire, I hold with those who favor fire.",
+//   "But if it had to perish twice, I think I know enough of hate",
+//   "To say that for destruction ice, Is also great and would suffice."]
 
 var unimportant_words = new Set('i','is','was','am','are','a','and','the');
 
@@ -42,11 +50,11 @@ document.body.onkeydown = function(e){
   }
 }
 
-// if( isMobile.any() ){ // user device is mobile
-//   document.body.ontouchstart = function(e){ // screen touch
-//     next_frame();
-//   }
-// }
+if( isMobile.any() ){ // user device is mobile
+  document.querySelector("canvas").ontouchstart = function(e){ // screen touch
+    next_frame();
+  }
+}
 
 //global vars
 window.curr_paragraph; //index
@@ -59,7 +67,7 @@ var total_results_past; //num of times at previous check
 var restart_recog; //true so that recording doesn't stop
 var speech_pause_timer; //check if user is speaking
 var text_to_speech;
-var conf_cuttoff = 0.7; // when to move to next line
+var conf_cuttoff = 0.8; // when to move to next line
 var reading;
 
 initialize();
@@ -95,10 +103,10 @@ recognition.onresult = function(event) {
         input_set.add(input_split[j])
       }
     }
-    if(input_raw.includes("portal help")){
-      read_speech("Ok! You're supposed to say: " + window.paragraph_list[window.curr_paragraph]);
-      break;
-    }
+    // if(input_raw.includes("portal help")){
+    //   read_speech("Ok! You're supp osed to say: " + window.paragraph_list[window.curr_paragraph]);
+    //   break;
+    // }
   }
 
   let input_set_size = input_set.size
@@ -202,5 +210,5 @@ function startTimer(){
 function resetAll(){
   // initialize();
   // init();
-  window.location.href="/"
+  window.location.href="/viewer";
 }
