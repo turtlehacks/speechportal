@@ -45,3 +45,6 @@ google-streetview
 
 ## Try it out
 [0b01.com](Temporary Host)
+
+## Developed by
+Ricky Han, Johann Miller, and Kevin Chen
