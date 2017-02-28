@@ -33,7 +33,10 @@ Check out the repo at: https://github.com/rickyhan/speechvr
 ## Challenges we ran into
 Each VR frame of Google Street view contains a massive amount of data, which we had to resolve using parallel image downloads and non-blocking compressions on an SSD server in order to allow fast mobile rendering.
 
-## Built With
+## Try it out
+[0b01.com](Temporary Host)
+
+### Built With
 python
 javascript
 google-web-speech-api
@@ -42,8 +45,5 @@ flask
 opengl
 google-streetview
 
-## Try it out
-[0b01.com](Temporary Host)
-
-## Developed by
+### Developed by
 Ricky Han, Johann Miller, and Kevin Chen
