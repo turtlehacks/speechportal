@@ -20,7 +20,7 @@ Over the course of human history, formal speech has proven to be the singly most
 
 And as college students who have had to give speeches to protect their school programs, to inspire suffering communities, and to defend others from bigotry, we believe everyone should have the essential human ability to communicate to others.
 
-That's why we built SpeechPortal, to make preparing for your next speech fun, easy, and intuitive! Using novel webVR and in-browser speech recognition technology, SpeechPortal creates a dynamic training ground for people who need to quickly and intelligently memorize their next talk! Accessible to anyone with a mobile phone, computer!
+That's why we built SpeechPortal, to make preparing for your next speech fun, easy, and intuitive! Using novel webVR and in-browser speech recognition technology, SpeechPortal creates a dynamic training ground for people who need to quickly and intelligently memorize their next talk! Accessible to anyone with a mobile phone or computer!
 
 ## What it does
 SpeechPortal is a webVR app that produces a dynamic virtual memory palace made up of memorable Google Streetview locations that holds image clues generated from an inputted speech. Once you use the clues around you to help you recite the first portion of your speech, the speech-processing portion of our project advances you to the next location (and paragraph in your speech), and will wait to give you a 'hint' if you hesitate/say the wrong thing.
