@@ -10,6 +10,7 @@ source .env/bin/activate
 pip install -r requirements.txt
 
 npm install webpack -g
+webpack
 
 mkdir images assets
 python serve.py
@@ -28,13 +29,11 @@ SpeechPortal is a webVR app that produces a dynamic virtual memory palace made u
 ## How we built it
 We used Python and Flask to serve as a container to host the VR environment, a multithreaded Python script to download streetview images onto an SSD server, WebVR/OpenGL technologies for VR rendering, and Javascript to render the auditory processing, perform image stitching, and perform secondary VR processing client-side. We made extensive use of Google Street View Image API and Web Speech API (supported by Google speech processing). On the NLP side, we used NLTK to broke down the speech into sections and extract keywords/phrases, and for each keyword, we found a related image using Unsplash.
 
-Check out the repo at: https://github.com/rickyhan/speechvr
+## Try it out
+[Temporary Host (use Google Chrome)](http://0b01.com)
 
 ## Challenges we ran into
 Each VR frame of Google Street view contains a massive amount of data, which we had to resolve using parallel image downloads and non-blocking compressions on an SSD server in order to allow fast mobile rendering.
-
-## Try it out
-[0b01.com](Temporary Host)
 
 ### Built With
 python
